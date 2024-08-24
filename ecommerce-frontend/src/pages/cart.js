@@ -37,9 +37,9 @@ export default function Cart() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cartItems.map((item) => (
             <div key={item.id} className="bg-white border border-gray-300 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h2 className="text-xl font-semibold text-gray-900">{item.product.name}</h2>
-              <p className="text-gray-600">{item.product.category}</p>
-              <p className="text-gray-800 text-lg font-medium">${item.product.price}</p>
+              <h2 className="text-xl font-semibold text-gray-900">{item.name}</h2>
+              <p className="text-gray-600">{item.category}</p>
+              <p className="text-gray-800 text-lg font-medium">${item.price}</p>
               <button
                 className="bg-red-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-red-600 transition-colors"
                 onClick={() => handleRemove(item.id)}

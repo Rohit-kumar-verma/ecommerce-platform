@@ -2,26 +2,25 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
-import pg from 'pg';
-
-const { Pool } = pg
+// import { pool } from '../../../../../ecommerce-backend/config/db.js';
+import { pool } from '../config/db.js';
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { name, email, password, role } = req.body;
-
-    // Hash the password
+  const { username, email, password, role } = req.body;
+  try {
     const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await pool.query(
+      "INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *",
+      [username, email, hashedPassword, role]
+    );
 
-    // Insert into database
-    await Pool.query('INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)', [name, email, hashedPassword, role]);
+    const token = jwt.sign({ userId: newUser.rows[0].id, role: newUser.rows[0].role }, process.env.JWT_SECRET, {
+      expiresIn: '2h'
+    });
 
-    // Create JWT token
-    const token = jwt.sign({ userId: newUserId, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({ token });
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.json({ token, user: newUser.rows[0] });
+  } catch (err) {
+    console.error('Error during signup:', err);  // Log the error for debugging
+    res.status(500).json({ error: 'User registration failed' });
   }
-}
+};

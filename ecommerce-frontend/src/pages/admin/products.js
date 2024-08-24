@@ -18,20 +18,21 @@ export default function AdminProducts() {
   useEffect(() => {
     const checkAdminAuth = async () => {
       const token = localStorage.getItem('token');
+      const role=localStorage.getItem("role")
       
       if (!token) {
         router.push('/login');  // Redirect to login if token is missing
         return;
       }
 
-      const res = await fetch('/api/auth/verifyAdmin', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    //   const res = await fetch('/api/auth/verifyAdmin', {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
 
-      if (!res.ok) {
-        router.push('/login');  // Redirect to login if not an admin
+      if (role==='buyer') {
+        router.push('/');  // Redirect to login if not an admin
       }
     };
 
@@ -52,24 +53,27 @@ export default function AdminProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-
+    // const role = localStorage.getItem('role');
     const url = editMode ? `/api/products/${editId}` : '/api/products';
     const method = editMode ? 'PUT' : 'POST';
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (res.ok) {
-      fetchProducts();
-      resetForm();
-    } else {
-      alert('Failed to save product');
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
+          });
+          if (res.ok) {
+            fetchProducts();
+            resetForm();
+          } else {
+            alert('Failed to save product');
+          }
+          router.push('/')
+    } catch (error) {
+        console.log(error);
     }
   };
 
@@ -87,7 +91,6 @@ export default function AdminProducts() {
         Authorization: `Bearer ${token}`,
       },
     });
-
     if (res.ok) {
       fetchProducts();
     } else {

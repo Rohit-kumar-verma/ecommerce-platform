@@ -1,8 +1,8 @@
 // import pool from '../../../server/config/pool';
 
 // import { verifyToken } from '../../../ecommerce-backend/middleware/authMiddleware.js';
-import {verifyToken} from '../../../../../ecommerce-backend/middleware/authMiddleware.js'
-import {pool} from '../../../../../ecommerce-backend/config/db.js'
+import {verifyToken} from '../middleware/authMiddleware.js'
+import {pool} from '../config/db.js'
 
 export default async function handler(req, res) {
   const { id } = req.query;
@@ -18,11 +18,11 @@ export default async function handler(req, res) {
       res.status(500).json({ error: 'Failed to fetch product' });
     }
   } else if (req.method === 'PUT') {
-    const { token } = req.headers;
+    const token = req.headers.authorization.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
-    const { user } = verifyToken(token);
-    if (user.role !== 'admin') return res.status(403).json({ error: 'Not authorized' });
+    const { role } = verifyToken(token);
+    if (role !== 'admin') return res.status(403).json({ error: 'Not authorized' });
 
     const { name, category, description, price, discount } = req.body;
     try {
@@ -35,14 +35,15 @@ export default async function handler(req, res) {
       res.status(500).json({ error: 'Failed to update product' });
     }
   } else if (req.method === 'DELETE') {
-    const { token } = req.headers;
+    const token = req.headers.authorization.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
-
-    const { user } = verifyToken(token);
-    if (user.role !== 'admin') return res.status(403).json({ error: 'Not authorized' });
+    const { role } = verifyToken(token);
+    console.log(role);
+    if (role === 'buyer') return res.status(403).json({ error: 'Not authorized' });
 
     try {
-      await pool.query('DELETE FROM products WHERE id = $1', [id]);
+      const value = await pool.query('DELETE FROM products WHERE id = $1', [id]);
+      console.log(value);
       res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Failed to delete product' });

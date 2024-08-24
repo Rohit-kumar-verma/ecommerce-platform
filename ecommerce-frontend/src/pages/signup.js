@@ -1,26 +1,25 @@
 "use client";
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+// import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Signup() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'buyer' });
   const router = useRouter();
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target)
+    const username=formData.get("username");
+    const email=formData.get("email");
+    const password=formData.get("password");
+    const role=formData.get("role");
+
     try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
+      const res = await axios.post('/api/auth/signup', {username, email, password, role});
+      if (res.status===200) {
         router.push('/login');
       } else {
+        console.log(res.json());
         const errorData = await res.json();
         alert(errorData.error);
       }
@@ -39,10 +38,9 @@ export default function Signup() {
             <input
               id="name"
               type="text"
-              name="name"
+              name="username"
               placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
+              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -54,8 +52,7 @@ export default function Signup() {
               type="email"
               name="email"
               placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
+              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -67,8 +64,7 @@ export default function Signup() {
               type="password"
               name="password"
               placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
+              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -78,8 +74,7 @@ export default function Signup() {
             <select
               id="role"
               name="role"
-              value={formData.role}
-              onChange={handleChange}
+              // value=''
               className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
               <option value="buyer">Buyer</option>

@@ -2,25 +2,31 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {pool} from '../../../../../ecommerce-backend/config/db.js'
+import {pool} from '../config/db.js'
 
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Find the user
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    const user = result.rows[0];
+  try {
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    if (user.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
 
-    // Create JWT token
-    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
-    res.status(200).json({ token, user });
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    if (!validPassword) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user.rows[0].id, role: user.rows[0].role }, process.env.JWT_SECRET, {
+      expiresIn: '2h'
+    });
+
+    res.json({ token, user: user.rows[0] });
+  } catch (err) {
+    console.error('Error during login:', err);  // Log the error for debugging
+    res.status(500).json({ error: 'User login failed' });
   }
-}
+};

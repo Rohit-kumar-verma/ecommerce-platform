@@ -7,9 +7,22 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
+  const [isAdminOrSeller, setIsAdminOrSeller] = useState(false); // State to track if user is admin or seller
   const router = useRouter();
 
   useEffect(() => {
+    const fetchUserRole = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const role = localStorage.getItem('role')
+          setIsAdminOrSeller(role === 'admin' || role === 'seller');
+        } catch (error) {
+          console.error('Error fetching user role:', error);
+        }
+      }
+    };
+
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get('/api/products', {
@@ -23,15 +36,25 @@ export default function Home() {
         console.error('Error fetching products:', error);
       }
     };
+
+    fetchUserRole();
     fetchProducts();
   }, [search, category]);
 
   const navigateToSignup = () => {
-    router.push('/signup'); // Assuming you have a /signup page
+    router.push('/signup');
   };
 
   const navigateToLogin = () => {
-    router.push('/login'); // Assuming you have a /login page
+    router.push('/login');
+  };
+
+  const navigateToAddProduct = () => {
+    router.push('/admin/products'); // Assuming you have an /add-product page
+  };
+
+  const navigateToCart = () => {
+    router.push('/cart'); // Assuming you have a /cart page
   };
 
   return (
@@ -51,6 +74,20 @@ export default function Home() {
           >
             Login
           </button>
+          <button
+            onClick={navigateToCart}
+            className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors"
+          >
+            View Cart
+          </button>
+          {isAdminOrSeller && (
+            <button
+              onClick={navigateToAddProduct}
+              className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 transition-colors"
+            >
+              Add More Product
+            </button>
+          )}
         </div>
       </div>
       <div className="flex flex-col sm:flex-row mb-6 gap-4">
