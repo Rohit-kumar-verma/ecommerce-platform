@@ -25,13 +25,13 @@ export default function Home() {
 
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('/api/products', {
-          params: {
-            name: search || undefined,
-            category: category || undefined,
-          },
+        const { data } = await axios.get('/api/products');
+        const newData = data.filter(item => {
+          const matchesName = search ? item.name.toLowerCase().includes(search.toLowerCase()) : true;
+          const matchesCategory = category ? item.category === category : true;
+          return matchesName && matchesCategory;
         });
-        setProducts(data);
+        setProducts(newData);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
