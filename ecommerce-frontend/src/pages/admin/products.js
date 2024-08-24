@@ -25,12 +25,6 @@ export default function AdminProducts() {
         return;
       }
 
-    //   const res = await fetch('/api/auth/verifyAdmin', {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-
       if (role==='buyer') {
         router.push('/');  // Redirect to login if not an admin
       }
@@ -53,7 +47,6 @@ export default function AdminProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    // const role = localStorage.getItem('role');
     const url = editMode ? `/api/products/${editId}` : '/api/products';
     const method = editMode ? 'PUT' : 'POST';
     try {

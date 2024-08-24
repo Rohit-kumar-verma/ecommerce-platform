@@ -1,5 +1,4 @@
 "use client";
-// import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -40,7 +39,6 @@ export default function Signup() {
               type="text"
               name="username"
               placeholder="Name"
-              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -52,7 +50,6 @@ export default function Signup() {
               type="email"
               name="email"
               placeholder="Email"
-              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -64,7 +61,6 @@ export default function Signup() {
               type="password"
               name="password"
               placeholder="Password"
-              // value=''
               className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -74,7 +70,6 @@ export default function Signup() {
             <select
               id="role"
               name="role"
-              // value=''
               className="mt-1 block w-full px-3 py-2 border text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
               <option value="buyer">Buyer</option>

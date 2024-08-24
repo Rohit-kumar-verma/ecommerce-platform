@@ -5,7 +5,7 @@ export function verifyToken(token) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return decoded;
   } catch (error) {
-    // return "nvalid or expired token"
+
     throw new Error('Invalid or expired token');
   }
 }

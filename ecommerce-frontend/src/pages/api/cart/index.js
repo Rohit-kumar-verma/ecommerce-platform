@@ -1,5 +1,3 @@
-// import pool from '../../../server/config/pool';
-// import { verifyToken } from '../../../ecommerce-backend/middleware/authMiddleware.js';
 import {verifyToken} from '../middleware/authMiddleware.js'
 import {pool} from '../config/db.js'
 

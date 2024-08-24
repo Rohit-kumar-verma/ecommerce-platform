@@ -1,5 +1,3 @@
-// import Pool from '../../../Pool';
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {pool} from '../config/db.js'

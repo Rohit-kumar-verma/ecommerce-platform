@@ -1,8 +1,5 @@
-// import Pool from '../../../Pool';
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-// import { pool } from '../../../../../ecommerce-backend/config/db.js';
 import { pool } from '../config/db.js';
 
 export default async function handler(req, res) {
