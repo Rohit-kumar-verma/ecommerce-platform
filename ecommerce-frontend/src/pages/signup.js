@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import { apiRequest } from './lib/apiRequest';
+import { apiRequest } from './lib/apiRequest.js';
 
 export default function Signup() {
   const router = useRouter();
