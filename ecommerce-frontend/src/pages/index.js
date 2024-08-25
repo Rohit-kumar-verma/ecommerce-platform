@@ -150,22 +150,28 @@ export default function Home() {
       alert('Please login first');
       return;
     }
-    console.log(token);
-    const res = await axios.post('https://ecommerce-platform-nine.vercel.app/api/cart', 
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      },
-      {body:productId}
-
-    );
-      console.log(res);
-    if (res.status===(201||200)) {
-      alert('Product added to cart');
-    } else {
-      alert('Failed to add product to cart');
+  
+    try {
+      const res = await axios.post(
+        'https://ecommerce-platform-nine.vercel.app/api/cart',
+        { productId }, // This is the body of the request
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (res.status === 201 || res.status === 200) {
+        alert('Product added to cart');
+      } else {
+        alert('Failed to add product to cart');
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+      alert('An error occurred while adding the product to cart');
     }
   }
+  
 }
