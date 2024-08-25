@@ -12,7 +12,6 @@ export default function Signup() {
     const email=formData.get("email");
     const password=formData.get("password");
     const role=formData.get("role");
-    console.log(process.env.BASE_URL);
 
     try {
       const res = await apiRequest.post(`/api/auth/signup`, {username, email, password, role});

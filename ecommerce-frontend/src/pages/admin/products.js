@@ -36,6 +36,7 @@ export default function AdminProducts() {
   }, []);
 
   const fetchProducts = async () => {
+    console.log("hii");
     const res = await apiRequest.get(`/api/products`);
     const data = res.data;
     setProducts(data);

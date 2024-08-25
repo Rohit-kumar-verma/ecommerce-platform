@@ -5,6 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const result = await pool.query('SELECT * FROM products');
+      console.log(result);
       res.status(200).json(result.rows);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch products' });
