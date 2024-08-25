@@ -36,7 +36,6 @@ export default function AdminProducts() {
   }, []);
 
   const fetchProducts = async () => {
-    console.log("hii");
     const res = await apiRequest.get(`/api/products`);
     const data = res.data;
     setProducts(data);
@@ -61,7 +60,6 @@ export default function AdminProducts() {
         },
         body: JSON.stringify(formData)
       });
-      console.log(res);
       if (res.ok) {
         fetchProducts();
         resetForm();
@@ -84,7 +82,7 @@ export default function AdminProducts() {
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
-    const res = await apiRequest.delete(`${process.env.BASE_URL}/api/products/${id}`, {
+    const res = await apiRequest.delete(`/api/products/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
