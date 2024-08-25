@@ -17,7 +17,7 @@ export default function Login() {
       const res = await apiRequest.post(`/api/auth/login`, formData);
       console.log(res.data);
 
-      if (res.status==200) {
+      if (res.status==(200|2001)) {
         const { token, user } = res.data;
         localStorage.setItem('token', token);
         localStorage.setItem('role', user.role);

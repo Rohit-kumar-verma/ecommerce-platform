@@ -160,7 +160,7 @@ export default function Home() {
       }
     );
       console.log(res);
-    if (res.status===201) {
+    if (res.status===(201||200)) {
       alert('Product added to cart');
     } else {
       alert('Failed to add product to cart');

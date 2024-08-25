@@ -16,7 +16,7 @@ export default function Signup() {
 
     try {
       const res = await apiRequest.post(`/api/auth/signup`, {username, email, password, role});
-      if (res.status===200) {
+      if (res.status===(200||2001)) {
         router.push('/login');
       } else {
         console.log(res.json());

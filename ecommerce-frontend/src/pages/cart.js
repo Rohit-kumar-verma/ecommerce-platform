@@ -23,7 +23,7 @@ export default function Cart() {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (res.status===200) {
+    if (res.status===(200|201)) {
       setCartItems(cartItems.filter((item) => item.id !== itemId));
     } else {
       alert('Failed to remove item from cart');
