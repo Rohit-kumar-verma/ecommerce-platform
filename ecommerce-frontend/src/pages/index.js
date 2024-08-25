@@ -152,8 +152,7 @@ export default function Home() {
     }
   
     try {
-      const res = await axios.post(
-        'https://ecommerce-platform-nine.vercel.app/api/cart',
+      const res = await apiRequest.post('/api/cart',
         { productId }, // This is the body of the request
         {
           headers: {
