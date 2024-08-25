@@ -151,15 +151,15 @@ export default function Home() {
       return;
     }
     console.log(token);
-    const res = await axios('https://ecommerce-platform-nine.vercel.app/api/cart', 
+    const res = await axios.post('https://ecommerce-platform-nine.vercel.app/api/cart', 
       {
-        post,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body:productId
-      }
+      },
+      {body:productId}
+
     );
       console.log(res);
     if (res.status===(201||200)) {
