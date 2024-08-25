@@ -39,8 +39,7 @@ export default async function handler(req, res) {
     if (role === 'buyer') return res.status(403).json({ error: 'Not authorized' });
 
     try {
-      const value = await pool.query('DELETE FROM products WHERE id = $1', [id]);
-      console.log(value);
+      await pool.query('DELETE FROM products WHERE id = $1', [id]);
       res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Failed to delete product' });

@@ -7,7 +7,7 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartItems = async () => {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/cart', {
+      const res = await fetch(`${process.env.BASE_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -18,7 +18,7 @@ export default function Cart() {
 
   const handleRemove = async (itemId) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`/api/cart/${itemId}`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/cart/${itemId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },
     });

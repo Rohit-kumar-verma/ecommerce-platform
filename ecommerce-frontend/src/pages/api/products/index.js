@@ -13,14 +13,15 @@ export default async function handler(req, res) {
     const token = req.headers.authorization.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
-    const { role } = verifyToken(token);
-    if (role === 'buyer') return res.status(403).json({ error: 'Not authorized' });
+    const user = verifyToken(token);
+    console.log(user);
+    if (user.role === 'buyer') return res.status(403).json({ error: 'Not authorized' });
 
     const { name, category, description, price, discount } = req.body;
     try {
       await pool.query(
-        'INSERT INTO products (name, category, description, price, discount) VALUES ($1, $2, $3, $4, $5)',
-        [name, category, description, price, discount]
+        'INSERT INTO products (seller_id, name, category, description, price, discount) VALUES ($1, $2, $3, $4, $5, $6)',
+        [user.userId, name, category, description, price, discount]
       );
       res.status(201).json({ message: 'Product added successfully' });
     } catch (error) {

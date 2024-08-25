@@ -35,7 +35,7 @@ export default function AdminProducts() {
   }, []);
 
   const fetchProducts = async () => {
-    const res = await fetch('/api/products');
+    const res = await fetch(`${process.env.BASE_URL}/api/products`);
     const data = await res.json();
     setProducts(data);
   };
@@ -50,7 +50,7 @@ export default function AdminProducts() {
     const url = editMode ? `/api/products/${editId}` : '/api/products';
     const method = editMode ? 'PUT' : 'POST';
     try {
-        const res = await fetch(url, {
+        const res = await fetch(`${process.env.BASE_URL}+${url}`, {
             method,
             headers: {
               'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function AdminProducts() {
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`/api/products/${id}`, {
+    const res = await fetch(`${process.env.BASE_URL}/api/products/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,

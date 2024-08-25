@@ -14,7 +14,7 @@ export default function Signup() {
     const role=formData.get("role");
 
     try {
-      const res = await axios.post('/api/auth/signup', {username, email, password, role});
+      const res = await axios.post(`${process.env.BASE_URL}/api/auth/signup`, {username, email, password, role});
       if (res.status===200) {
         router.push('/login');
       } else {

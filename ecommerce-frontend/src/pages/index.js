@@ -7,7 +7,8 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [isAdminOrSeller, setIsAdminOrSeller] = useState(false); // State to track if user is admin or seller
+  const [isAdminOrSeller, setIsAdminOrSeller] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track if the user is logged in
   const router = useRouter();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function Home() {
         try {
           const role = localStorage.getItem('role')
           setIsAdminOrSeller(role === 'admin' || role === 'seller');
+          setIsLoggedIn(true); // Set the user as logged in
         } catch (error) {
           console.error('Error fetching user role:', error);
         }
@@ -41,20 +43,19 @@ export default function Home() {
     fetchProducts();
   }, [search, category]);
 
-  const navigateToSignup = () => {
-    router.push('/signup');
-  };
-
-  const navigateToLogin = () => {
-    router.push('/login');
-  };
-
-  const navigateToAddProduct = () => {
-    router.push('/admin/products'); // Assuming you have an /add-product page
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    setIsLoggedIn(false);
+    router.push('/');
   };
 
   const navigateToCart = () => {
-    router.push('/cart'); // Assuming you have a /cart page
+    router.push('/cart'); 
+  };
+
+  const navigateToAddProduct = () => {
+    router.push('/admin/products');
   };
 
   return (
@@ -62,18 +63,29 @@ export default function Home() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Products</h1>
         <div className="flex gap-4">
-          <button
-            onClick={navigateToSignup}
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Signup
-          </button>
-          <button
-            onClick={navigateToLogin}
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Login
-          </button>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => router.push('/signup')}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+              >
+                Signup
+              </button>
+              <button
+                onClick={() => router.push('/login')}
+                className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+              >
+                Login
+              </button>
+            </>
+          )}
           <button
             onClick={navigateToCart}
             className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors"
@@ -106,7 +118,6 @@ export default function Home() {
           <option value="">All Categories</option>
           <option value="clothes">Clothes</option>
           <option value="shoes">Shoes</option>
-          {/* Add more categories as needed */}
         </select>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
