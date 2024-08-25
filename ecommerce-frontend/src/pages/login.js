@@ -24,7 +24,7 @@ export default function Login() {
         router.push('/');
       } else {
         // const errorData = await res.data;
-        alert(errorData.error || 'Login failed');
+        alert('Login failed');
       }
     } catch (err) {
       console.error('Login error:', err);
