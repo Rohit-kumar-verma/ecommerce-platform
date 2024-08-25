@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { apiRequest } from './lib/_apiRequest.js';
+import { apiRequest } from './lib/apiRequest.js/index.js';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });

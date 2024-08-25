@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { apiRequest } from './lib/_apiRequest';
+import { apiRequest } from './lib/apiRequest';
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
