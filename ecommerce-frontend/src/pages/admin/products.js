@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { apiRequest } from '../lib/apiRequest.js';
+import { apiRequest } from '../../lib/apiRequest.js';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
