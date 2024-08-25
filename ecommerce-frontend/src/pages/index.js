@@ -157,7 +157,7 @@ export default function Home() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body:{productId}
+        body:productId
       }
     );
       console.log(res);
