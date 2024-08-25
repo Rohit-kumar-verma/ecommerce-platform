@@ -160,7 +160,7 @@ export default function Home() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body:{productId}
+          body:JSON.stringify({productId})
         }
       );
         console.log(res);
