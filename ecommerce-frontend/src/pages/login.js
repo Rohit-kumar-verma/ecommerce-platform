@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await apiRequest.post(`/api/auth/login`, formData);
-      console.log(res.data);
+      console.log(res);
 
       if (res.status==(200|2001)) {
         const { token, user } = res.data;
