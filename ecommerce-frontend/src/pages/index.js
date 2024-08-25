@@ -163,8 +163,8 @@ export default function Home() {
           body:{productId}
         }
       );
-  
-      if (res.status === 201 || res.status === 200) {
+        console.log(res);
+      if (res.ok) {
         alert('Product added to cart');
       } else {
         alert('Failed to add product to cart');
