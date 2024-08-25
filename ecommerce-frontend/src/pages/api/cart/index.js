@@ -18,6 +18,7 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'POST') {
     const token = req.headers.authorization.replace('Bearer ', '');
+    
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
     const user = verifyToken(token);

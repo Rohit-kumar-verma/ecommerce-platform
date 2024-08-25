@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { apiRequest } from '../lib/apiRequest.js';
+import axios from 'axios';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -150,13 +151,13 @@ export default function Home() {
       return;
     }
     console.log(token);
-    const res = await apiRequest.post('/api/cart', 
-      { productId },
+    const res = await axios.post('https://ecommerce-platform-nine.vercel.app/api/cart', 
       {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
+        body:{productId}
       }
     );
       console.log(res);
