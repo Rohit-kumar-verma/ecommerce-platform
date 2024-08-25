@@ -152,13 +152,15 @@ export default function Home() {
     }
   
     try {
-      const res = await apiRequest.post('/api/cart',
-        { productId }, // This is the body of the request
+      const res = await fetch(
+        'https://ecommerce-platform-nine.vercel.app/api/cart',
         {
+          method:'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
+          body:{productId}
         }
       );
   
