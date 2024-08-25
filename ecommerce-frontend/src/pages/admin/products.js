@@ -49,7 +49,7 @@ export default function AdminProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const url = editMode ? `http://ecommerce-platform-lake.vercel.app/api/products/${editId}` : `http://ecommerce-platform-lake.vercel.app/api/products`;
+    const url = editMode ? `https://ecommerce-platform-nine.vercel.app//api/products/${editId}` : `https://ecommerce-platform-nine.vercel.app//api/products`;
     const method = editMode ? 'PUT' : 'POST';
     try {
       const res = await fetch(url,
