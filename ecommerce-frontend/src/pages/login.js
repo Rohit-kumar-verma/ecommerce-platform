@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { apiRequest } from './lib/_apiRequest.js';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,21 +14,20 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${process.env.BASE_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        const { token, user } = await res.json();
+      const res = await apiRequest.post(`/api/auth/login`, formData);
+      console.log(res.data);
+
+      if (res.status==200) {
+        const { token, user } = res.data;
         localStorage.setItem('token', token);
         localStorage.setItem('role', user.role);
         router.push('/');
       } else {
         const errorData = await res.json();
-        alert(errorData.error);
+        alert(errorData.error || 'Login failed');
       }
     } catch (err) {
+      console.error('Login error:', err);
       alert('Login failed');
     }
   };

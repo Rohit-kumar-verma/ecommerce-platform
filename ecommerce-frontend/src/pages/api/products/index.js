@@ -14,7 +14,6 @@ export default async function handler(req, res) {
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
     const user = verifyToken(token);
-    console.log(user);
     if (user.role === 'buyer') return res.status(403).json({ error: 'Not authorized' });
 
     const { name, category, description, price, discount } = req.body;

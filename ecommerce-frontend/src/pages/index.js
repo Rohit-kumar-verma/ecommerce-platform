@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { apiRequest } from './lib/_apiRequest.js';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -27,7 +27,7 @@ export default function Home() {
 
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('/api/products');
+        const { data } = await apiRequest.get('/api/products');
         const newData = data.filter(item => {
           const matchesName = search ? item.name.toLowerCase().includes(search.toLowerCase()) : true;
           const matchesCategory = category ? item.category === category : true;
@@ -150,16 +150,17 @@ export default function Home() {
       return;
     }
 
-    const res = await fetch('/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ productId }),
-    });
-
-    if (res.ok) {
+    const res = await apiRequest.post('/api/cart', 
+      { productId },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+      console.log(res);
+    if (res.status===201) {
       alert('Product added to cart');
     } else {
       alert('Failed to add product to cart');

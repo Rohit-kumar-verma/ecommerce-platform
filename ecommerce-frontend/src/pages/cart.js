@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { apiRequest } from './lib/_apiRequest';
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -7,10 +8,10 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartItems = async () => {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${process.env.BASE_URL}/api/cart`, {
+      const res = await apiRequest.get(`/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await res.json();
+      const data = res.data;
       setCartItems(data);
     };
     fetchCartItems();
@@ -18,12 +19,11 @@ export default function Cart() {
 
   const handleRemove = async (itemId) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`${process.env.BASE_URL}/api/cart/${itemId}`, {
-      method: 'DELETE',
+    const res = await apiRequest.delete(`/api/cart/${itemId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (res.ok) {
+    if (res.status===200) {
       setCartItems(cartItems.filter((item) => item.id !== itemId));
     } else {
       alert('Failed to remove item from cart');

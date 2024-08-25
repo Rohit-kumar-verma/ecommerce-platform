@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { apiRequest } from './lib/_apiRequest';
 
 export default function Signup() {
   const router = useRouter();
@@ -12,9 +12,10 @@ export default function Signup() {
     const email=formData.get("email");
     const password=formData.get("password");
     const role=formData.get("role");
+    console.log(process.env.BASE_URL);
 
     try {
-      const res = await axios.post(`${process.env.BASE_URL}/api/auth/signup`, {username, email, password, role});
+      const res = await apiRequest.post(`/api/auth/signup`, {username, email, password, role});
       if (res.status===200) {
         router.push('/login');
       } else {

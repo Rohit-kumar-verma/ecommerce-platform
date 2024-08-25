@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { apiRequest } from '../lib/_apiRequest';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -35,8 +36,8 @@ export default function AdminProducts() {
   }, []);
 
   const fetchProducts = async () => {
-    const res = await fetch(`${process.env.BASE_URL}/api/products`);
-    const data = await res.json();
+    const res = await apiRequest.get(`/api/products`);
+    const data = res.data;
     setProducts(data);
   };
 
@@ -47,28 +48,32 @@ export default function AdminProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const url = editMode ? `/api/products/${editId}` : '/api/products';
+    const url = editMode ? `https://ecommerce-platform-iy7hxjnmq-loncelots-projects.vercel.app/api/products/${editId}` : `https://ecommerce-platform-iy7hxjnmq-loncelots-projects.vercel.app/api/products`;
     const method = editMode ? 'PUT' : 'POST';
     try {
-        const res = await fetch(`${process.env.BASE_URL}+${url}`, {
-            method,
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(formData),
-          });
-          if (res.ok) {
-            fetchProducts();
-            resetForm();
-          } else {
-            alert('Failed to save product');
-          }
-          router.push('/')
+      const res = await fetch(url,
+        {
+          method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData)
+      });
+      console.log(res);
+      if (res.ok) {
+        fetchProducts();
+        resetForm();
+        router.push('/'); // Redirect after successful operation
+      } else {
+        alert('Failed to save product');
+      }
     } catch (error) {
-        console.log(error);
+      console.error(error);
+      alert('An error occurred');
     }
   };
+  
 
   const handleEdit = (product) => {
     setFormData(product);
@@ -78,13 +83,12 @@ export default function AdminProducts() {
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(`${process.env.BASE_URL}/api/products/${id}`, {
-      method: 'DELETE',
+    const res = await apiRequest.delete(`${process.env.BASE_URL}/api/products/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.ok) {
+    if (res.status === (200 || 201)) {
       fetchProducts();
     } else {
       alert('Failed to delete product');
