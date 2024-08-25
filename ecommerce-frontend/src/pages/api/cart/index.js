@@ -22,14 +22,29 @@ export default async function handler(req, res) {
     if (!token) return res.status(401).json({ error: 'No token provided' });
 
     const user = verifyToken(token);
-    console.log(user);
-    const { productId } = req.body;
+    const { productId, quantity } = req.body;
+    // const user.userId = user.user.userId; // Assuming you have the user's ID from authentication
 
     try {
-      await pool.query(
-        'INSERT INTO cart (user_id, product_id) VALUES ($1, $2)',
+      // Check if the product is already in the cart
+      const existingCartItem = await pool.query(
+        'SELECT * FROM cart WHERE user_id = $1 AND product_id = $2',
         [user.userId, productId]
       );
+
+      if (existingCartItem.rows.length > 0) {
+        // Product exists, so update the quantity
+        await pool.query(
+          'UPDATE cart SET quantity = quantity + $1 WHERE user_id = $2 AND product_id = $3',
+          [quantity, user.userId, productId]
+        );
+      } else {
+        // Product does not exist, so insert a new row
+        await pool.query(
+          'INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3)',
+          [user.userId, productId, quantity]
+        );
+      }
       res.status(201).json({ message: 'Product added to cart' });
     } catch (error) {
       res.status(500).json({ error: 'Failed to add product to cart' });

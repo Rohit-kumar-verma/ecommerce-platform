@@ -122,29 +122,44 @@ export default function Home() {
         </select>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.length > 0 ? products.map((product) => (
-          <div key={product.id} className="bg-white border border-gray-300 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <h2 className="text-xl font-semibold text-gray-900">{product.name}</h2>
-            <p className="text-gray-600">{product.category}</p>
-            <p className="text-gray-800 text-lg font-medium">${product.price}</p>
-            {product.discount > 0 && (
-              <p className="text-red-500 mt-1">Discount: {product.discount}%</p>
-            )}
-            <button
-              className="bg-green-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-green-600 transition-colors"
-              onClick={() => addToCart(product.id)}
-            >
-              Add to Cart
-            </button>
-          </div>
-        )) : (
-          <p className="text-gray-500">No products found</p>
+      {products.length > 0 ? products.map((product) => (
+        <div key={product.id} className="bg-white border border-gray-300 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <h2 className="text-xl font-semibold text-gray-900">{product.name}</h2>
+          <p className="text-gray-600">{product.category}</p>
+          <p className="text-gray-800 text-lg font-medium">${product.price}</p>
+        {product.discount > 0 && (
+          <p className="text-red-500 mt-1">Discount: {product.discount}%</p>
         )}
+          <div className="mt-4">
+            <label htmlFor={`quantity-${product.id}`} className="block text-gray-700">Quantity:</label>
+            <input
+              type="number"
+              id={`quantity-${product.id}`}
+              name="quantity"
+              min="1"
+              defaultValue="1"
+              className="border border-gray-300 text-black rounded-md p-2 w-20"
+            />
+          </div>
+          <button
+            className="bg-green-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-green-600 transition-colors"
+            onClick={() => {
+              const quantity = document.getElementById(`quantity-${product.id}`).value || 1;
+              addToCart(product.id, parseInt(quantity));
+            }}
+          >
+            Add to Cart
+          </button>
+        </div>
+        )) : (
+        <p className="text-gray-500">No products found</p>
+        )}
+
       </div>
     </div>
   );
 
-  async function addToCart(productId) {
+  async function addToCart(productId, quantity) {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Please login first');
@@ -160,7 +175,7 @@ export default function Home() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body:JSON.stringify({productId})
+          body:JSON.stringify({productId, quantity})
         }
       );
         console.log(res);
