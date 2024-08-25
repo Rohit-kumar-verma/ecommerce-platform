@@ -149,7 +149,7 @@ export default function Home() {
       alert('Please login first');
       return;
     }
-
+    console.log(token);
     const res = await apiRequest.post('/api/cart', 
       { productId },
       {
