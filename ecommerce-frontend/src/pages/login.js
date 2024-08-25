@@ -23,7 +23,7 @@ export default function Login() {
         localStorage.setItem('role', user.role);
         router.push('/');
       } else {
-        const errorData = await res.json();
+        // const errorData = await res.data;
         alert(errorData.error || 'Login failed');
       }
     } catch (err) {
